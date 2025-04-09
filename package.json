@@ -1,0 +1,16 @@
+{
+  "name": "FrontBack3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "shop-server.js",
+  "scripts": {
+    "start:shop": "node shop-server.js",
+    "start:admin": "node admin-server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

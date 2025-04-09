@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Админ-панель</title>
+</head>
+<body>
+  <h1>Админ-панель</h1>
+  <h2>Добавить товар</h2>
+  <form id="addForm">
+    <input type="text" name="name" placeholder="Название">
+    <input type="text" name="description" placeholder="Описание">
+    <input type="number" name="price" placeholder="Цена">
+    <input type="text" name="categories" placeholder="Категории через запятую">
+    <button type="submit">Добавить</button>
+  </form>
+  <h2>Редактировать товар</h2>
+  <form id="editForm">
+    <input type="number" name="id" placeholder="ID">
+    <input type="text" name="name" placeholder="Название">
+    <input type="text" name="description" placeholder="Описание">
+    <input type="number" name="price" placeholder="Цена">
+    <input type="text" name="categories" placeholder="Категории через запятую">
+    <button type="submit">Редактировать</button>
+  </form>
+  <h2>Удалить товар</h2>
+  <form id="deleteForm">
+    <input type="number" name="id" placeholder="ID">
+    <button type="submit">Удалить</button>
+  </form>
+  <script>
+    const addForm = document.getElementById('addForm');
+    const editForm = document.getElementById('editForm');
+    const deleteForm = document.getElementById('deleteForm');
+
+    addForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(addForm);
+      const body = {
+        name: formData.get('name'),
+        description: formData.get('description'),
+        price: Number(formData.get('price')),
+        categories: formData.get('categories').split(',').map(c => c.trim())
+      };
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      console.log(data);
+    });
+
+    editForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(editForm);
+      const id = formData.get('id');
+      const body = {};
+      if (formData.get('name')) body.name = formData.get('name');
+      if (formData.get('description')) body.description = formData.get('description');
+      if (formData.get('price')) body.price = Number(formData.get('price'));
+      if (formData.get('categories')) body.categories = formData.get('categories').split(',').map(c => c.trim());
+      const res = await fetch('/api/products/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      console.log(data);
+    });
+
+    deleteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(deleteForm);
+      const id = formData.get('id');
+      const res = await fetch('/api/products/' + id, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      console.log(data);
+    });
+  </script>
+</body>
+</html>

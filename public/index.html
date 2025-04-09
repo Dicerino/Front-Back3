@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Магазин</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Магазин</h1>
+  <div id="products"></div>
+  <script>
+    async function loadProducts() {
+      const res = await fetch('/api/products');
+      const products = await res.json();
+      const container = document.getElementById('products');
+      container.innerHTML = '';
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <h2>${p.name}</h2>
+          <p>Описание: ${p.description}</p>
+          <p>Цена: ${p.price}</p>
+          <p>Категории: ${p.categories.join(', ')}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+    loadProducts();
+  </script>
+</body>
+</html>
